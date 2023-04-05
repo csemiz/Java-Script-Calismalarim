@@ -1,0 +1,32 @@
+﻿body
+{
+    background-color: #f18f49;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.birinciBtn {
+background-color:yellow;
+color:darkblue;
+height:90px;
+width:200px;
+font-size:20px;
+font-weight:bold;
+text-transform:uppercase;
+}
+.ikinciBtn {
+    background-color: red;
+    color: yellow;
+   
+}
+.tiklandiBtn {
+    background-color: black;
+    color: white;
+
+}
+.btnOrtak {
+    height: 90px;
+    width: 200px;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+}

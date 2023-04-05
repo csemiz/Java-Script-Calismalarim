@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html lang="tr" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Meyve Örneği Liste</title>
+</head>
+<body>
+    <div style="margin-top:50px; width:100%; text-align:center">
+        <h2>Meyve Listesi</h2>
+        <hr color="#dbdbdb" width="100%" size="6" /> <br /> <br />
+
+        <input type="text" placeholder="Meyve adı giriniz..."
+               id="txtMeyveAdi" /> <br /> <br />
+
+        <input type="button" value="EKLE" class="ekleBtn"
+               onclick="meyveEkle()" />
+
+        <input type="button" value="TEMİZLE" class="temizleBtn"
+               onclick="temizle()" />
+        <br /> <br />
+
+        <input type="text" placeholder="Meyve Ara..." id="txtMeyveAra" />
+        <br /> <br />
+
+        <div id="meyveDiv"></div>
+
+    </div>
+
+    <script>
+        var meyveler = []; // boş bir dizi tanımladık
+
+        function temizle() {
+            meyveler = [];
+           var sonuc= document.querySelectorAll("input[type=text]");
+            
+            console.log(sonuc)
+            for (var i = 0; i < sonuc.length; i++) {
+                sonuc[i].value = "";
+            }
+
+        } // temizle fonk. bitti
+
+        function meyveEkle() {
+            //meyve adını alalım
+            var meyveAdi = document.getElementById("txtMeyveAdi").value.trim();
+            if (meyveAdi == null || meyveAdi.length == 0) {
+                alert("Meyve adı boş geçilemez");
+                return;
+            }
+            var yeniMeyve = {
+                ad: meyveAdi,
+                adet: 1
+            };
+
+            // meyveler listesine eklenecek
+            var meyvedenVarmi = false;
+
+            for (var i = 0; i < meyveler.length; i++) {
+
+                if (meyveler[i].ad.toLowerCase() == meyveAdi.toLowerCase()) {
+                    meyvedenVarmi = true;
+                    meyveler[i].adet += 1;
+                    break; // return yazarsak ne olur?
+                }
+
+            } // for bitti
+
+            if (!meyvedenVarmi) {
+                meyveler.push(yeniMeyve);
+            }
+
+            document.getElementById("txtMeyveAdi").value = "";
+            // Tüm meyveleri getirecek fonk. çağırmalıyız
+            MeyveleriGetir();
+
+        }// meyveEkle fonk. bitti
+
+        function MeyveleriGetir() {
+            //meyveleri tek tek div içine yerleştireceğiz
+            //Bu işlem için OL sıralı liste kullanalım
+
+            document.getElementById("meyveDiv").innerHTML = "";
+            var toplam = 0;
+            var ol = document.createElement("ol");
+            ol.setAttribute("id", "meyveList");
+            for (var i = 0; i < meyveler.length; i++) {
+                toplam += meyveler[i].adet;
+                var li = document.createElement("li");
+                li.innerHTML =
+                    "<b>" + meyveler[i].ad + " - <i>"
+                    + meyveler[i].adet + "</i></b>";
+                li.style.listStyleType = "none";
+
+
+                //artı butonu ekleyelim
+                var artiBtn = document.createElement("input");
+                artiBtn.setAttribute("type", "button");
+                artiBtn.setAttribute("value", "+");
+                artiBtn.setAttribute("id", meyveler[i].ad);
+                artiBtn.addEventListener("click", AdetArttir);
+                //eksi butonu ekleyelim
+                var eksiBtn = document.createElement("input");
+                eksiBtn.setAttribute("type", "button");
+                eksiBtn.setAttribute("value", "-");
+                eksiBtn.setAttribute("id", meyveler[i].ad);
+                eksiBtn.addEventListener("click", AdetAzalt);
+                //sil butonu ekleyelim
+                var silBtn = document.createElement("input");
+                silBtn.setAttribute("type", "button");
+                silBtn.setAttribute("value", "SİL");
+                silBtn.setAttribute("id", meyveler[i].ad);
+                silBtn.addEventListener("click", MeyveSil);
+
+                li.appendChild(artiBtn);
+                li.appendChild(eksiBtn);
+                li.appendChild(silBtn);
+                ol.appendChild(li);
+
+            } // for burada bitti
+
+            document.getElementById("meyveDiv").appendChild(ol);
+            var span = document.createElement("span");
+            span.innerHTML = "<b>Toplam=" + toplam +
+                "</b>";
+            document.getElementById("meyveDiv").appendChild(span);
+
+        } // MeyveleriGetir fonk. bitti
+
+        function AdetArttir() {
+            for (var i = 0; i < meyveler.length; i++) {
+                if (meyveler[i].ad.toLowerCase() ==
+                    this.id.toLowerCase()) {
+                    meyveler[i].adet++;
+                    break;
+                }
+            } // for bitti
+            MeyveleriGetir();
+        } //AdetArttir fonk. bitti
+
+
+        function MeyveSil() {
+            for (var i = 0; i < meyveler.length; i++) {
+                if (meyveler[i].ad.toLowerCase() ==
+                    this.id.toLowerCase()) {
+                    meyveler.splice(i, 1); // arrayden çıkardık
+                    break;
+                }
+            } // for bitti
+            MeyveleriGetir();
+        } //MeyveSil fonk. bitti
+
+        function AdetAzalt() {
+            for (var i = 0; i < meyveler.length; i++) {
+                if (meyveler[i].ad.toLowerCase() ==
+                    this.id.toLowerCase()) {
+                    meyveler[i].adet--;
+                    //Acaba meyvenin adeti sıfır oldu mu?
+                    if (meyveler[i].adet == 0) {
+                        meyveler.splice(i, 1);
+                    }
+                    break;
+                }
+            } // for bitti
+            MeyveleriGetir();
+        } //AdetAzalt fonk. bitti
+
+
+
+    </script>
+
+</body>
+</html>
+
